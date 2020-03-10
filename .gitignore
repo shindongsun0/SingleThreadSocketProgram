@@ -2,3 +2,7 @@
 /.gradle/
 /build/
 /build/classes/java/main/
+src/main/resources/
+src/test/
+.idea/vcs.xml
+.idea
