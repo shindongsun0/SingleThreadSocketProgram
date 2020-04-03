@@ -1,10 +1,7 @@
 package server;
 
 import java.io.*;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.util.Arrays;
 
 public class SingleThreadServer {
@@ -47,26 +44,34 @@ public class SingleThreadServer {
                     BufferedReader br = new BufferedReader(new InputStreamReader(in));
                     String line = null;
 
-                    while ((line = br.readLine()) != null) {
+                    while(true){
+                        try{
+                            line = br.readLine();
+                            if(line == null){
+                                System.out.println(clientSocket.getLocalAddress() + "가 Null을 보내서 아무짓도 안 했음");
+                                break;
+                            }
+                        }catch (SocketException e){
+                            System.out.println(clientSocket.getLocalAddress() + "와의 연결이 끊어졌습니다.");
+                            pw.close();
+                            br.close();
+                            clientSocket.close();
+                            break;
+                        }
+
                         System.out.println("Client로부터 받은 message : " + line);
                         pw.println(line);
                     }
-
-                    System.out.println(clientSocket.getLocalAddress() + "와의 연결이 끊어졌습니다.");
-                    pw.close();
-                    br.close();
-                    clientSocket.close();
                 }
             }
             System.out.println("server socket cannot created");
         }catch (IOException e) {
+            e.printStackTrace();
             System.out.println(e.toString());
             System.out.println(String.format("%s OCCURRED", e.getClass().getSimpleName()));
             System.out.println(Arrays.asList(e.getStackTrace()));
         }
     }
-
-
 
     public static void main(String[] args) {
         SingleThreadServer server = new SingleThreadServer();

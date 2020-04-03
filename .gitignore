@@ -6,3 +6,5 @@ src/main/resources/
 src/test/
 .idea/vcs.xml
 .idea
+
+SingleThreadClient.class
